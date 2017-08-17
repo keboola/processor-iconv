@@ -1,0 +1,9 @@
+version: '2'
+services:
+  processor-iconv:
+    build: .
+    image: keboola/processor-iconv
+    tty: true
+    stdin_open: true
+    volumes:
+      - ./data/:/data/
