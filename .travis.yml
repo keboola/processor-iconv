@@ -2,9 +2,8 @@ sudo: required
 language: bash
 services:
   - docker
-before_script:
-  - docker-compose build processor-headers
-script: ./tests/run.sh
+script:
+  - docker-compose build processor-iconv
 after_success:
   - docker images
 deploy:
