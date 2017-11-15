@@ -2,7 +2,8 @@
 
 [![Build Status](https://travis-ci.org/keboola/processor-iconv.svg?branch=master)](https://travis-ci.org/keboola/processor-iconv)
 
-Iconv processor. Takes all CSV files in `/data/in/tables` (except `.manifest` files), converts their encoding to UTF-8 and stores them in `/data/out/tables`. Ignores directory structure and deletes all non-csv files.
+Iconv processor. Takes all CSV files (or sliced tables) in `/data/in/tables`, converts their encoding to UTF-8 and stores them in `/data/out/tables`.
+Manifests (if present) are copied without any change.
  
 ## Development
  
@@ -10,9 +11,11 @@ Clone this repository and init the workspace with following commands:
 
 - `docker-compose build`
 
-Then load some CSV files into `./data/in/tables`, create empty folder `./data/out/tables` and run 
+### TDD 
 
-- `docker-compose run --rm -e KBC_PARAMETER_SOURCE_ENCODING=WINDOWS-1250 processor-iconv`
+ - Edit the code
+ - Run `docker-compose run --rm tests` 
+ - Repeat
  
 # Integration
  - Build is started after push on [Travis CI](https://travis-ci.org/keboola/processor-iconv)
@@ -22,13 +25,13 @@ Then load some CSV files into `./data/in/tables`, create empty folder `./data/ou
    - publish image to ECR if release is tagged
    
 # Usage
-The processor makes a CSV file orthogonal. It fills missing column names with auto-generated names (`auto_col_XX`) 
-and missing values in rows with empty string. The processor is registered with id `keboola-processor.headers`. 
-It supports optional parameters:
 
-- `source_encoding` --- required source encoding
+## Parameters
 
-See [list of supported encoding](https://gist.github.com/hakre/4188459).
+### source_encoding
+
+Source encoding of the csv file (or sliced table). Destination encoding is always UTF-8.
+
 
 ## Sample configurations
 
@@ -44,3 +47,4 @@ Default parameters:
     }
 }
 ```
+
