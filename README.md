@@ -1,4 +1,4 @@
-# processor-headers
+# processor-iconv
 
 [![Build Status](https://travis-ci.org/keboola/processor-iconv.svg?branch=master)](https://travis-ci.org/keboola/processor-iconv)
 

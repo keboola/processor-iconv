@@ -2,8 +2,11 @@ sudo: required
 language: bash
 services:
   - docker
-script:
-  - docker-compose build processor-iconv
+before_script:
+  - docker -v
+  - docker-compose -v
+  - docker-compose build
+script: docker-compose run --rm tests
 after_success:
   - docker images
 deploy:

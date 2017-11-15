@@ -5,5 +5,12 @@ services:
     image: keboola/processor-iconv
     tty: true
     stdin_open: true
+    command: sh /code/run.sh
+  tests:
+    image: keboola/processor-iconv
+    tty: true
+    stdin_open: true
+    command: sh /code/tests/run.sh
     volumes:
-      - ./data/:/data/
+      - ./:/code
+
