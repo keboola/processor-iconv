@@ -12,4 +12,4 @@ find . ! -iname "*.manifest" ! -name "." -type d | xargs -n1 -I {} sh -c "mkdir 
 # process files
 find . ! -iname "*.manifest" ! -name "." -type f | xargs -n1 -I {} sh -c "iconv -f $KBC_PARAMETER_SOURCE_ENCODING -t UTF-8 \"{}\" > $KBC_DATADIR/out/tables/\"{}\""
 # move manifests
-mv $KBC_DATADIR/in/tables/*.manifest $KBC_DATADIR/out/tables/
+find . -iname "*.manifest" ! -name "." -type f | xargs -n1 -I {} sh -c "mv \"{}\" $KBC_DATADIR/out/tables/\"{}\""
