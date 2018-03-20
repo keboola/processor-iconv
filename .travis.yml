@@ -21,7 +21,9 @@ before_script:
 
 script:
   # run test job inside KBC
-  - docker run --rm -e KBC_STORAGE_TOKEN quay.io/keboola/syrup-cli:latest run-job $KBC_DEVELOPERPORTAL_APP $KBC_APP_TEST_CONFIG_ID test
+  - skip
+  # integration tests for processors are not there yet  
+  #- docker run --rm -e KBC_STORAGE_TOKEN quay.io/keboola/syrup-cli:latest run-job $KBC_DEVELOPERPORTAL_APP $KBC_APP_TEST_CONFIG_ID test
 
 deploy:
   provider: script
