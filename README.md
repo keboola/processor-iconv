@@ -16,7 +16,7 @@ Example configuration which converts everything from `WINDOWS-1250` to UTF8:
 ```
 {  
     "definition": {
-        "component": "keboola-processor.iconv"
+        "component": "keboola.processor-iconv"
     },
     "parameters": {
         "source_encoding": "WINDOWS-1250"
