@@ -2,45 +2,21 @@
 
 [![Build Status](https://travis-ci.org/keboola/processor-iconv.svg?branch=master)](https://travis-ci.org/keboola/processor-iconv)
 
-Iconv processor. Takes all CSV files (or sliced tables) in `/data/in/tables`, converts their encoding to UTF-8 and stores them in `/data/out/tables`.
-Manifests (if present) are copied without any change.
- 
-## Development
- 
-Clone this repository and init the workspace with following commands:
-
-- `docker-compose build`
-
-### TDD 
-
- - Edit the code
- - Run `docker-compose run --rm tests` 
- - Repeat
- 
-# Integration
- - Build is started after push on [Travis CI](https://travis-ci.org/keboola/processor-iconv)
- - [Build steps](https://github.com/keboola/processor-iconv/blob/master/.travis.yml)
-   - build image
-   - execute tests against new image
-   - publish image to ECR if release is tagged
-   
+[Iconv](http://php.net/manual/en/function.iconv.php) processor. Takes all CSV files (or sliced tables) in `/data/in/tables` and `/data/in/files`, converts their encoding to destination encoding and stores them in `/data/out/tables` or `/data/out/files`. Manifests (if present) are copied without any change. Sliced files are supported.
+  
 # Usage
+The processor takes three options:
 
-## Parameters
+- `source_encoding` - required string, [encoding](https://gist.github.com/hakre/4188459) of the source files/tables, must be same for all files/tables
+- `target_encoding` - optional string, [encoding](https://gist.github.com/hakre/4188459) of the target files/tables, defaults to `UTF-8`
+- `modifier` - optional string, can be either `\\TRANSLIT` or `\\IGNORE`, defines the action to do when a character cannot be converted. The default value is empty, which means that the conversion will fail.
 
-### source_encoding
-
-Source encoding of the csv file (or sliced table). Destination encoding is always UTF-8.
-
-
-## Sample configurations
-
-Default parameters:
+Example configuration which converts everything from `WINDOWS-1250` to UTF8:
 
 ```
 {  
     "definition": {
-        "component": "keboola-processor.headers"
+        "component": "keboola-processor.iconv"
     },
     "parameters": {
         "source_encoding": "WINDOWS-1250"
@@ -48,3 +24,25 @@ Default parameters:
 }
 ```
 
+For more information about processors, please refer to [the developers documentation](https://developers.keboola.com/extend/component/processors/). 
+
+## Development
+ 
+Clone this repository and init the workspace with following command:
+
+```
+git clone https://github.com/keboola/processor-iconv
+cd processor-iconv
+docker-compose build
+docker-compose run --rm dev composer install --no-scripts
+```
+
+Run the test suite using this command:
+
+```
+docker-compose run --rm dev composer tests
+```
+ 
+# Integration
+
+For information about deployment and integration with KBC, please refer to the [deployment section of developers documentation](https://developers.keboola.com/extend/component/deployment/) 

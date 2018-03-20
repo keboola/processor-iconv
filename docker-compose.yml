@@ -1,16 +1,8 @@
 version: '2'
 services:
-  processor-iconv:
+  dev:
     build: .
-    image: keboola/processor-iconv
-    tty: true
-    stdin_open: true
-    command: sh /code/run.sh
-  tests:
-    image: keboola/processor-iconv
-    tty: true
-    stdin_open: true
-    command: sh /code/tests/run.sh
+    image: keboola/my-component
     volumes:
       - ./:/code
-
+      - ./data:/data

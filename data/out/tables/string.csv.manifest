@@ -1,0 +1,28 @@
+{
+    "id": "in.c-docker-demo.data",
+    "uri": "https://connection.keboola.com//v2/storage/tables/in.c-docker-demo.data",
+    "name": "data",
+    "primary_key": [],
+    "created": "2015-01-25T01:35:14+0100",
+    "last_change_date": "2015-01-25T01:35:14+0100",
+    "last_import_date": "2015-01-25T01:35:14+0100",
+    "columns": [
+        "id",
+        "name",
+        "text"
+    ],
+    "metadata": [
+        {
+            "id": "228956",
+            "key": "KBC.createdBy.component.id",
+            "value": "keboola.python-transformation",
+            "provider": "system",
+            "timestamp": "2017-05-26 00:39:07"
+        }
+    ],
+    "column_metadata": {
+        "id": [],
+        "name": [],
+        "text": []
+    }
+}
