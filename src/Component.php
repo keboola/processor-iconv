@@ -43,7 +43,7 @@ class Component extends BaseComponent
         }
     }
 
-    private function processFile(SplFileInfo $inFile, $destinationFileName, $filter)
+    private function processFile(SplFileInfo $inFile, string $destinationFileName, string $filter) : void
     {
         try {
             $source = fopen($inFile->getPathname(), 'r');

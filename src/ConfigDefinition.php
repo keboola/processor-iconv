@@ -9,7 +9,7 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
 class ConfigDefinition extends BaseConfigDefinition
 {
-    private function isValidEncoding($encoding)
+    private function isValidEncoding(string $encoding) : bool
     {
         try {
             iconv($encoding, 'UTF-8', 'abc');
