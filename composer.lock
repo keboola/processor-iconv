@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "735102ac3d7136462c3542d5b35895b7",
+    "content-hash": "a6ef5cf868fa4fca352a46d99fb40eb4",
     "packages": [
         {
             "name": "keboola/php-component",
-            "version": "2.0.0",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/keboola/php-component.git",
-                "reference": "b1c0cef6831bb8a8894ba0f5ad4b2c8cb0ac00a3"
+                "reference": "23eb9bf5cb76a90701e3e8f64d000c1693e03327"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/keboola/php-component/zipball/b1c0cef6831bb8a8894ba0f5ad4b2c8cb0ac00a3",
-                "reference": "b1c0cef6831bb8a8894ba0f5ad4b2c8cb0ac00a3",
+                "url": "https://api.github.com/repos/keboola/php-component/zipball/23eb9bf5cb76a90701e3e8f64d000c1693e03327",
+                "reference": "23eb9bf5cb76a90701e3e8f64d000c1693e03327",
                 "shasum": ""
             },
             "require": {
@@ -57,7 +57,7 @@
                 "docker",
                 "keboola"
             ],
-            "time": "2018-03-06T10:29:17+00:00"
+            "time": "2018-03-09T14:13:12+00:00"
         },
         {
             "name": "symfony/config",

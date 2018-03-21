@@ -1,7 +1,7 @@
 {
-    "name": "fill-me-in/fill-me-in",
+    "name": "keboola/processor-iconv",
     "license": "MIT",
-    "description": "fill-me-in",
+    "description": "Uses iconv to convert encoding in data directory",
     "type": "project",
     "require": {
         "PHP": "^7.1",
@@ -18,12 +18,12 @@
     },
     "autoload": {
         "psr-4": {
-            "MyComponent\\": "src/"
+            "Keboola\\ProcessorIconv\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "MyComponent\\Tests\\": "tests/phpunit/"
+            "Keboola\\ProcessorIconv\\Tests\\": "tests/phpunit/"
         }
     },
     "scripts": {
