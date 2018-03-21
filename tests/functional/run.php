@@ -32,13 +32,28 @@ foreach ($finder as $testSuite) {
 
     $runCommand = "KBC_DATADIR={$temp->getTmpFolder()} php /code/src/run.php";
     $runProcess = new Process($runCommand);
-    $runProcess->mustRun();
-
-    $diffCommand = "diff --exclude=.gitkeep --ignore-all-space --recursive " . $testSuite->getPathname() . "/expected/data/out " . $temp->getTmpFolder() . "/out";
-    $diffProcess = new Process($diffCommand);
-    $diffProcess->run();
-    if ($diffProcess->getExitCode() > 0) {
-        print "\n" . $diffProcess->getOutput() . "\n";
-        exit(1);
+    $runProcess->run();
+    if (($runProcess->getExitCode() > 0) && !file_exists($testSuite->getPathname() . "/expected")) {
+        if ($runProcess->getExitCode() == 1) {
+            print "Failed as expected ({$runProcess->getExitCode()}): {$runProcess->getOutput()} \n";
+        } else {
+            print "Failed unexpectedly {$runProcess->getExitCode()}\n";
+            if ($runProcess->getOutput()) {
+                print $runProcess->getOutput() . "\n";
+            }
+            if ($runProcess->getErrorOutput()) {
+                print $runProcess->getErrorOutput() . "\n";
+            }
+            exit(1);
+        }
+    } else {
+        $diffCommand = "diff --exclude=.gitkeep --ignore-all-space --recursive " .
+            $testSuite->getPathname() . "/expected/data/out " . $temp->getTmpFolder() . "/out";
+        $diffProcess = new Process($diffCommand);
+        $diffProcess->run();
+        if ($diffProcess->getExitCode() > 0) {
+            print "\n" . $diffProcess->getOutput() . "\n";
+            exit(1);
+        }
     }
 }
