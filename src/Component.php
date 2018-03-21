@@ -8,6 +8,7 @@ use Keboola\Component\BaseComponent;
 use Keboola\Component\UserException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 
 class Component extends BaseComponent
 {
@@ -15,16 +16,6 @@ class Component extends BaseComponent
     {
         /** @var Config $config */
         $config = $this->getConfig();
-        try {
-            iconv($config->getSourceEncoding(), 'UTF-8', 'abc');
-        } /** @noinspection PhpRedundantCatchClauseInspection */ catch (\ErrorException $e) {
-            throw new UserException('Source encoding ' . $config->getSourceEncoding() . ' is invalid.');
-        }
-        try {
-            iconv('UTF-8', $config->getTargetEncoding(), 'abc');
-        } /** @noinspection PhpRedundantCatchClauseInspection */ catch (\ErrorException $e) {
-            throw new UserException('Target encoding ' . $config->getTargetEncoding() . ' is invalid.');
-        }
         $filter = 'convert.iconv.' . $config->getSourceEncoding() .  '/' .
             $config->getTargetEncoding() . $config->getModifier();
 
@@ -44,32 +35,37 @@ class Component extends BaseComponent
                 // copy manifest without modification
                 $fs->copy($inFile->getPathname(), $this->getDataDir() . "/out/$dir/" . $inFile->getFilename());
             } else {
-                try {
-                    $source = fopen($inFile->getPathname(), 'r');
-                    $destinationDir = $this->getDataDir() . "/out/$dir/" . $inFile->getRelativePath();
-                    $fs->mkdir($destinationDir);
-                    $destination = fopen(
-                        $destinationDir . '/' . $inFile->getFilename(),
-                        'w'
-                    );
-                } /** @noinspection PhpRedundantCatchClauseInspection */ catch (\ErrorException $e) {
-                    throw new \Exception('Failed opening in/out ' . $dir . ' ' . $e->getMessage());
-                }
-
-                stream_filter_append($destination, $filter, STREAM_FILTER_WRITE);
-                $converted = '';
-                try {
-                    while (!feof($source)) {
-                        $converted = fread($source, 1000);
-                        fwrite($destination, $converted);
-                    }
-                } /** @noinspection PhpRedundantCatchClauseInspection */ catch (\ErrorException $e) {
-                    throw new UserException('Conversion failed in ' . $inFile->getFilename() . '. ' .
-                        $e->getMessage() . '. Failing text: ' . $converted);
-                }
-                fclose($source);
-                fclose($destination);
+                $destinationDir = $this->getDataDir() . "/out/$dir/" . $inFile->getRelativePath();
+                $fs->mkdir($destinationDir);
+                $destinationFile = $destinationDir . '/' . $inFile->getFilename();
+                $this->processFile($inFile, $destinationFile, $filter);
             }
+        }
+    }
+
+    private function processFile(SplFileInfo $inFile, $destinationFileName, $filter)
+    {
+        try {
+            $source = fopen($inFile->getPathname(), 'r');
+            $destination = fopen($destinationFileName, 'w');
+        } /** @noinspection PhpRedundantCatchClauseInspection */ catch (\ErrorException $e) {
+            throw new \Exception('Failed opening in/out ' . $inFile->getPathname() . ' ' . $e->getMessage());
+        }
+        try {
+            stream_filter_append($destination, $filter, STREAM_FILTER_WRITE);
+            $converted = '';
+            try {
+                while (!feof($source)) {
+                    $converted = fread($source, 1000);
+                    fwrite($destination, $converted);
+                }
+            } /** @noinspection PhpRedundantCatchClauseInspection */ catch (\ErrorException $e) {
+                throw new UserException('Conversion failed in ' . $inFile->getFilename() . '. ' .
+                    $e->getMessage() . '. Failing text: ' . $converted);
+            }
+        } finally {
+            fclose($source);
+            fclose($destination);
         }
     }
 

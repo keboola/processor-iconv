@@ -20,6 +20,13 @@ class Config extends BaseConfig
 
     public function getModifier() : string
     {
-        return $this->getValue(['parameters', 'modifier']);
+        switch ($this->getValue(['parameters', 'on_error'])) {
+            case 'transliterate':
+                return '//TRANSLIT';
+            case 'ignore':
+                return '//IGNORE';
+            case 'fail':
+                return '';
+        }
     }
 }

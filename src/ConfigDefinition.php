@@ -9,6 +9,16 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
 class ConfigDefinition extends BaseConfigDefinition
 {
+    private function isValidEncoding($encoding)
+    {
+        try {
+            iconv($encoding, 'UTF-8', 'abc');
+            return true;
+        } /** @noinspection PhpRedundantCatchClauseInspection */ catch (\ErrorException $e) {
+            return false;
+        }
+    }
+
     protected function getParametersDefinition(): ArrayNodeDefinition
     {
         $parametersNode = parent::getParametersDefinition();
@@ -16,13 +26,29 @@ class ConfigDefinition extends BaseConfigDefinition
         /** @noinspection NullPointerExceptionInspection */
         $parametersNode
             ->children()
-                ->scalarNode('source_encoding')->isRequired()->end()
-                ->scalarNode('target_encoding')->defaultValue('UTF-8')->end()
-                ->scalarNode('modifier')
-                    ->defaultValue("")
+                ->scalarNode('source_encoding')
+                    ->isRequired()
                     ->validate()
-                        ->ifNotInArray(['//TRANSLIT', '//IGNORE', ''])
-                        ->thenInvalid('Modifier must be on of "//TRANSLIT" or "//IGNORE" or empty.')
+                        ->ifTrue(function ($encoding) {
+                            return !$this->isValidEncoding($encoding);
+                        })
+                        ->thenInvalid('Source encoding is not valid')
+                    ->end()
+                ->end()
+                ->scalarNode('target_encoding')
+                    ->defaultValue('UTF-8')
+                    ->validate()
+                    ->ifTrue(function ($encoding) {
+                        return !$this->isValidEncoding($encoding);
+                    })
+                    ->thenInvalid('Target encoding is not valid')
+                    ->end()
+                ->end()
+                ->scalarNode('on_error')
+                    ->defaultValue("fail")
+                    ->validate()
+                        ->ifNotInArray(['transliterate', 'ignore', 'fail'])
+                        ->thenInvalid('Modifier must be on of "transliterate" or "ignore" or "fail".')
                     ->end()
                 ->end()
             ->end()

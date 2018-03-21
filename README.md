@@ -9,7 +9,7 @@ The processor takes three options:
 
 - `source_encoding` - required string, [encoding](https://gist.github.com/hakre/4188459) of the source files/tables, must be same for all files/tables
 - `target_encoding` - optional string, [encoding](https://gist.github.com/hakre/4188459) of the target files/tables, defaults to `UTF-8`
-- `modifier` - optional string, can be either `\\TRANSLIT` or `\\IGNORE`, defines the action to do when a character cannot be converted. The default value is empty, which means that the conversion will fail.
+- `modifier` - optional string, can be either `transliterate` or `ignore` or `fail`, defines the action to do when a character cannot be converted. The default value is `fail`, which means that the conversion will fail.
 
 Example configuration which converts everything from `WINDOWS-1250` to UTF8:
 
