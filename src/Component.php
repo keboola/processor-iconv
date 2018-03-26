@@ -56,7 +56,7 @@ class Component extends BaseComponent
             $converted = '';
             try {
                 while (!feof($source)) {
-                    $converted = fread($source, 1000);
+                    $converted = fread($source, 1024);
                     fwrite($destination, $converted);
                 }
             } /** @noinspection PhpRedundantCatchClauseInspection */ catch (\ErrorException $e) {
