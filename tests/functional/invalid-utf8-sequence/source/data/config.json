@@ -2,6 +2,6 @@
 	"parameters": {
 		"source_encoding": "UTF-8",
 		"target_encoding": "UTF-8",
-		"on_error": "transliterate"
+		"on_error": "ignore"
 	}
 }
