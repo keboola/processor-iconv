@@ -51,9 +51,9 @@ class Component extends BaseComponent
         if ($config->ignoreErrors()) {
             $command .= ' -c';
         }
-        $command .= ' --from-code=' . $config->getSourceEncoding();
-        $command .= ' --to-code=' . $config->getTargetEncoding() . $config->getModifier() ;
-        $command .= ' ' . $inFile->getPathname() . ' > ' . $destinationFileName;
+        $command .= ' --from-code=' . escapeshellarg($config->getSourceEncoding());
+        $command .= ' --to-code=' . escapeshellarg($config->getTargetEncoding() . $config->getModifier()) ;
+        $command .= ' ' . escapeshellarg($inFile->getPathname()) . ' > ' . escapeshellarg($destinationFileName);
         $process = new Process($command);
         try {
             $process->mustRun();
