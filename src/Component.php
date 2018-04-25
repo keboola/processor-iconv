@@ -63,7 +63,6 @@ class Component extends BaseComponent
         }
     }
 
-
     protected function getConfigClass(): string
     {
         return Config::class;
