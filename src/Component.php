@@ -9,6 +9,8 @@ use Keboola\Component\UserException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 class Component extends BaseComponent
 {
@@ -21,13 +23,13 @@ class Component extends BaseComponent
 
         $finder = new Finder();
         $finder->in($this->getDataDir() . '/in/tables')->files();
-        $this->processDir($finder, 'tables', $filter);
+        $this->processDir($finder, 'tables', $config);
         $finder = new Finder();
         $finder->in($this->getDataDir() . '/in/files')->files();
-        $this->processDir($finder, 'files', $filter);
+        $this->processDir($finder, 'files', $config);
     }
 
-    private function processDir(Finder $finder, string $dir, string $filter) : void
+    private function processDir(Finder $finder, string $dir, Config $config) : void
     {
         $fs = new Filesystem();
         foreach ($finder as $inFile) {
@@ -37,37 +39,31 @@ class Component extends BaseComponent
             } else {
                 $destinationDir = $this->getDataDir() . "/out/$dir/" . $inFile->getRelativePath();
                 $fs->mkdir($destinationDir);
-                $destinationFile = $destinationDir . '/' . $inFile->getFilename();
-                $this->processFile($inFile, $destinationFile, $filter);
+                $destinationFile = $destinationDir . "/" . $inFile->getFilename();
+                $this->processFile($inFile, $destinationFile, $config);
             }
         }
     }
 
-    private function processFile(SplFileInfo $inFile, string $destinationFileName, string $filter) : void
+    private function processFile(SplFileInfo $inFile, string $destinationFileName, Config $config) : void
     {
-        try {
-            $source = fopen($inFile->getPathname(), 'r');
-            $destination = fopen($destinationFileName, 'w');
-        } /** @noinspection PhpRedundantCatchClauseInspection */ catch (\ErrorException $e) {
-            throw new \Exception('Failed opening in/out ' . $inFile->getPathname() . ' ' . $e->getMessage());
+        $command = "iconv";
+        if ($config->ignoreErrors()) {
+            $command .= " -c";
         }
+        $command .= " --from-code=" . $config->getSourceEncoding();
+        $command .= " --to-code=" . $config->getTargetEncoding() . $config->getModifier() ;
+        $command .= " " . $inFile->getPathname() . " > " . $destinationFileName;
+        var_dump($command);
+        $process = new Process($command);
         try {
-            stream_filter_append($destination, $filter, STREAM_FILTER_WRITE);
-            $converted = '';
-            try {
-                while (!feof($source)) {
-                    $converted = fread($source, 1024);
-                    fwrite($destination, $converted);
-                }
-            } /** @noinspection PhpRedundantCatchClauseInspection */ catch (\ErrorException $e) {
-                throw new UserException('Conversion failed in ' . $inFile->getFilename() . '. ' .
-                    $e->getMessage() . '. Failing text: ' . $converted);
-            }
-        } finally {
-            fclose($source);
-            fclose($destination);
+            $process->mustRun();
+        } /** @noinspection PhpRedundantCatchClauseInspection */ catch (ProcessFailedException $e) {
+            throw new UserException('Conversion failed in ' . $inFile->getFilename() . '. ' .
+                $e->getMessage() . '. Message: ' . $process->getErrorOutput());
         }
     }
+
 
     protected function getConfigClass(): string
     {
