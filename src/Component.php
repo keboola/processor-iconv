@@ -39,7 +39,7 @@ class Component extends BaseComponent
             } else {
                 $destinationDir = $this->getDataDir() . "/out/$dir/" . $inFile->getRelativePath();
                 $fs->mkdir($destinationDir);
-                $destinationFile = $destinationDir . "/" . $inFile->getFilename();
+                $destinationFile = $destinationDir . '/' . $inFile->getFilename();
                 $this->processFile($inFile, $destinationFile, $config);
             }
         }
@@ -47,13 +47,13 @@ class Component extends BaseComponent
 
     private function processFile(SplFileInfo $inFile, string $destinationFileName, Config $config) : void
     {
-        $command = "iconv";
+        $command = 'iconv';
         if ($config->ignoreErrors()) {
-            $command .= " -c";
+            $command .= ' -c';
         }
-        $command .= " --from-code=" . $config->getSourceEncoding();
-        $command .= " --to-code=" . $config->getTargetEncoding() . $config->getModifier() ;
-        $command .= " " . $inFile->getPathname() . " > " . $destinationFileName;
+        $command .= ' --from-code=' . $config->getSourceEncoding();
+        $command .= ' --to-code=' . $config->getTargetEncoding() . $config->getModifier() ;
+        $command .= ' ' . $inFile->getPathname() . ' > ' . $destinationFileName;
         var_dump($command);
         $process = new Process($command);
         try {
