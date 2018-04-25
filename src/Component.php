@@ -54,7 +54,6 @@ class Component extends BaseComponent
         $command .= ' --from-code=' . $config->getSourceEncoding();
         $command .= ' --to-code=' . $config->getTargetEncoding() . $config->getModifier() ;
         $command .= ' ' . $inFile->getPathname() . ' > ' . $destinationFileName;
-        var_dump($command);
         $process = new Process($command);
         try {
             $process->mustRun();
