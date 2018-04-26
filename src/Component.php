@@ -18,9 +18,6 @@ class Component extends BaseComponent
     {
         /** @var Config $config */
         $config = $this->getConfig();
-        $filter = 'convert.iconv.' . $config->getSourceEncoding() .  '/' .
-            $config->getTargetEncoding() . $config->getModifier();
-
         $finder = new Finder();
         $finder->in($this->getDataDir() . '/in/tables')->files();
         $this->processDir($finder, 'tables', $config);
