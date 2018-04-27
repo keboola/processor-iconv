@@ -18,6 +18,11 @@ class Config extends BaseConfig
         return $this->getValue(['parameters', 'target_encoding']);
     }
 
+    public function ignoreErrors() : bool
+    {
+        return $this->getValue(['parameters', 'on_error']) === 'ignore';
+    }
+
     public function getModifier() : string
     {
         switch ($this->getValue(['parameters', 'on_error'])) {
