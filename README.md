@@ -11,7 +11,9 @@ The processor takes three options:
 - `target_encoding` - optional string, [encoding](https://gist.github.com/hakre/4188459) of the target files/tables, defaults to `UTF-8`
 - `on_error` - optional string, can be either `transliterate` or `ignore` or `fail`, defines the action to do when a character cannot be converted. The default value is `fail`, which means that the conversion will fail.
 
-Example configuration which converts everything from `WINDOWS-1250` to UTF8:
+## Charset Conversion
+
+Example configuration which converts everything from `WINDOWS-1250` to `UTF-8`:
 
 ```
 {
@@ -24,8 +26,9 @@ Example configuration which converts everything from `WINDOWS-1250` to UTF8:
 }
 ```
 
+## UTF-8 Sanitization
 
-Example configuration which sanitizes invalid UTF-9:
+Example configuration which sanitizes invalid `UTF-8` characters and sequences:
 
 ```
 {
