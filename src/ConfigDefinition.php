@@ -11,6 +11,11 @@ class ConfigDefinition extends BaseConfigDefinition
 {
     private function isValidEncoding(string $encoding) : bool
     {
+        $mbEncodings = ['UCS-2', 'UCS-2LE', 'UCS-4', 'CSUCS4', 'UCS-4BE', 'UCS-4LE', 'UTF-16',
+            'UTF-16BE', 'UTF-16LE', 'UTF-32', 'UTF-32BE', 'UTF-32LE', 'UTF-7'];
+        if (in_array(strtoupper($encoding), $mbEncodings)) {
+            return true;
+        }
         try {
             iconv($encoding, 'UTF-8', 'abc');
             return true;
