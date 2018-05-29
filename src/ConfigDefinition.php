@@ -6,17 +6,20 @@ namespace Keboola\ProcessorIconv;
 
 use Keboola\Component\Config\BaseConfigDefinition;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Process\Process;
 
 class ConfigDefinition extends BaseConfigDefinition
 {
     private function isValidEncoding(string $encoding) : bool
     {
-        try {
-            iconv($encoding, 'UTF-8', 'abc');
-            return true;
-        } /** @noinspection PhpRedundantCatchClauseInspection */ catch (\ErrorException $e) {
-            return false;
-        }
+        $process = new Process('iconv -l');
+        $process->mustRun();
+        $encodings = preg_split("#[\n ,]#", $process->getOutput());
+        array_walk($encodings, function (&$val) : void {
+            $val = trim($val, " \n\\/");
+        });
+        $encodings = array_filter($encodings);
+        return in_array(strtoupper($encoding), $encodings);
     }
 
     protected function getParametersDefinition(): ArrayNodeDefinition

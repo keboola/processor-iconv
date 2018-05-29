@@ -1,0 +1,7 @@
+{
+	"parameters": {
+		"source_encoding": "UTF-16",
+		"target_encoding": "UTF-8",
+		"on_error": "transliterate"
+	}
+}
