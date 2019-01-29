@@ -52,6 +52,7 @@ class Component extends BaseComponent
         $command .= ' --to-code=' . escapeshellarg($config->getTargetEncoding() . $config->getModifier()) ;
         $command .= ' ' . escapeshellarg($inFile->getPathname()) . ' > ' . escapeshellarg($destinationFileName);
         $process = new Process($command);
+        $process->setTimeout(null);
         try {
             $process->mustRun();
         } /** @noinspection PhpRedundantCatchClauseInspection */ catch (ProcessFailedException $e) {
