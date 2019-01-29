@@ -51,7 +51,7 @@ class Component extends BaseComponent
         $command .= ' --from-code=' . escapeshellarg($config->getSourceEncoding());
         $command .= ' --to-code=' . escapeshellarg($config->getTargetEncoding() . $config->getModifier()) ;
         $command .= ' ' . escapeshellarg($inFile->getPathname()) . ' > ' . escapeshellarg($destinationFileName);
-        $process = new Process($command);
+        $process = Process::fromShellCommandline($command);
         $process->setTimeout(null);
         try {
             $process->mustRun();
