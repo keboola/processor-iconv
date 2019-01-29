@@ -12,7 +12,7 @@ class ConfigDefinition extends BaseConfigDefinition
 {
     private function isValidEncoding(string $encoding) : bool
     {
-        $process = new Process('iconv -l');
+        $process = new Process(['iconv',  '-l']);
         $process->mustRun();
         $encodings = preg_split("#[\n ,]#", $process->getOutput());
         array_walk($encodings, function (&$val) : void {
